@@ -15,3 +15,25 @@ resource "oci_objectstorage_bucket" "images" {
   auto_tiering   = "Disabled"
   versioning     = "Enabled"
 }
+
+resource "oci_objectstorage_object_lifecycle_policy" "images" {
+  namespace = data.oci_objectstorage_namespace.namespace.namespace
+  bucket    = oci_objectstorage_bucket.images.name
+
+  rules {
+    action      = "DELETE"
+    is_enabled  = "true"
+    name        = "old-versions"
+    time_amount = "90"
+    time_unit   = "DAYS"
+    target      = "previous-object-versions"
+  }
+  rules {
+    action      = "ABORT"
+    is_enabled  = "true"
+    name        = "multipart"
+    time_amount = "2"
+    time_unit   = "DAYS"
+    target      = "multipart-uploads"
+  }
+}

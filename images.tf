@@ -2,11 +2,11 @@
 resource "oci_objectstorage_object" "talos" {
   for_each = toset(var.talos_arch)
 
-  bucket      = oci_objectstorage_bucket.images.name
-  namespace   = data.oci_objectstorage_namespace.namespace.namespace
-  object      = "talos-${lower(each.key)}.oci"
-  source      = "oracle-${lower(each.key)}.oci"
-  content_md5 = filemd5("oracle-${lower(each.key)}.oci")
+  bucket    = oci_objectstorage_bucket.images.name
+  namespace = data.oci_objectstorage_namespace.namespace.namespace
+  object    = "talos-${lower(each.key)}.oci"
+  source    = "oracle-${lower(each.key)}.oci"
+  # content_md5 = filemd5("oracle-${lower(each.key)}.oci")
 }
 
 resource "oci_core_image" "talos" {
